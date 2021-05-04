@@ -57,12 +57,18 @@ class QueriesAndMutations {
     """;
   }
 
-  verifyUser(String code) {
+  verifyUser(int code) {
     return """
-    query {resendVerificationCode(data:{
-    email:$code
-  }
-  )
+    mutation {verifyUser(data:{
+    code:$code
+    }
+  ){
+     user{
+      _id,
+      email
+    },
+  token
+  }  
   }
     """;
   }

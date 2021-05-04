@@ -41,6 +41,11 @@ class AuthProvider with ChangeNotifier {
     return prefs;
   }
 
+  Future clearPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
   Future saveLoggedInInPreferences(bool loggedIn) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("loggedIn", loggedIn);
@@ -83,7 +88,7 @@ class AuthProvider with ChangeNotifier {
     return result;
   }
 
-  Future<Map<String, dynamic>> verifyUser(String code) async {
+  Future<Map<String, dynamic>> verifyUser(int code) async {
     var result;
 
     _verifiedInStatus = Status.Verifying;
@@ -102,11 +107,11 @@ class AuthProvider with ChangeNotifier {
       await saveVerifiedPreferences(true);
       _verifiedInStatus = Status.Verified;
       notifyListeners();
-      result = {'status': true, 'message': 'Authorized'};
+      result = {'status': true, 'message': 'Email successfully verified'};
     } else {
       _verifiedInStatus = Status.NotVerified;
       notifyListeners();
-      result = {'status': false, 'message': 'Unauthorized'};
+      result = {'status': false, 'message': 'Could not verify email'};
     }
     return result;
   }
@@ -133,10 +138,12 @@ class AuthProvider with ChangeNotifier {
         'status': response,
         'message': 'Code successfully sent',
       };
+
+      _sentInStatus = Status.Resent;
     } else {
-      _verifiedInStatus = Status.NotVerified;
+      _sentInStatus = Status.NotSent;
       notifyListeners();
-      result = {'status': false, 'message': 'Registration Failed', 'email': ''};
+      result = {'status': false, 'message': 'Could not resend code'};
     }
     return result;
   }

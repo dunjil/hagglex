@@ -71,6 +71,7 @@ var loading = Row(
   mainAxisAlignment: MainAxisAlignment.center,
   children: <Widget>[
     CircularProgressIndicator(
+      strokeWidth: 2.5,
       backgroundColor: Colors.white,
     ),
     SizedBox(
@@ -78,7 +79,7 @@ var loading = Row(
     ),
     Text(
       " Loading ... Please wait",
-      style: kTextStyle.copyWith(color: Colors.white),
+      style: kTextStyle.copyWith(color: kButtonColor),
     )
   ],
 );

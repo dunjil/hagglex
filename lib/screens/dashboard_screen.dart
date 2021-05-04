@@ -2,6 +2,7 @@ import '../utils/global_import.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     double _tm = SizeConfig.textMultiplier;
     double _im = SizeConfig.imageSizeMultiplier;
     double _hm = SizeConfig.heightMultiplier;
+    final provider = Provider.of<AuthProvider>(context);
     return Scaffold(
       backgroundColor: kWhiteColor,
       body: Container(
@@ -189,6 +191,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         "Markets",
                         style: kTitleTextStyle.copyWith(fontSize: _tm * 2.3),
                         textAlign: TextAlign.left,
+                      ),
+                      trailing: GestureDetector(
+                        onTap: () async {
+                          await provider.clearPrefs();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ),
+                          );
+                        },
+                        child: FaIcon(FontAwesomeIcons.signOutAlt,
+                            size: _tm * 2.8, color: Colors.red),
                       ),
                     ),
                     MarketsCard(

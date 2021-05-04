@@ -6,18 +6,16 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-String email;
-bool loggedIn = false;
-bool verified = false;
-
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  String email;
+  bool loggedIn = false;
+  bool verified = false;
+
   loadBusinessIdPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _loggedIn = prefs.getBool("loggedIn");
     bool _verified = prefs.getBool("verified");
     String _email = prefs.getString("email");
-    loggedIn = _loggedIn;
-    verified = _verified;
     email = _email;
     if (_loggedIn != null) {
       loggedIn = _loggedIn;
@@ -32,6 +30,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void dispose() {
     super.dispose();
     time.cancel();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadBusinessIdPreferences();
   }
 
   @override

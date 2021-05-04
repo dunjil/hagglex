@@ -1,6 +1,4 @@
 import '../utils/global_import.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import '../services/mutations_and_queries.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -25,7 +23,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   );
 
   bool _hidePassword;
-  Api api = Api();
   hideUnhidePassword() {
     setState(() {
       _hidePassword = !_hidePassword;
@@ -195,12 +192,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 kTextFieldStyle2.copyWith(color: Colors.grey)),
                         cursorColor: Colors.black,
                         style: kTextFieldStyle2.copyWith(fontSize: 2.5 * _tm),
-                        validator: (val) {
-                          if (val.isEmpty) {
-                            return "* Field must not be empty";
-                          }
-                          return null;
-                        },
                       ),
                       SizedBox(height: _hm * 2),
                       Row(
@@ -333,9 +324,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void createSnackBar(String message) {
     final snackBar = SnackBar(
-        content: Text(message, style: kTextStyle.copyWith(color: Colors.black)),
-        backgroundColor: Colors.white);
+      content: Text(message,
+          style: kTextStyle.copyWith(color: Colors.black),
+          textAlign: TextAlign.center),
+      backgroundColor: Colors.white,
+    );
 
-    Scaffold.of(context).showSnackBar(snackBar);
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

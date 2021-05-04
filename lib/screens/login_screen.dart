@@ -1,5 +1,4 @@
 import '../utils/global_import.dart';
-import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -10,9 +9,10 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _hidePassword;
-  Api api = Api();
 
+  BuildContext scaffoldContext;
   hideUnhidePassword() {
     setState(() {
       _hidePassword = !_hidePassword;
@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     double _hm = SizeConfig.heightMultiplier;
     final provider = Provider.of<AuthProvider>(context);
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: kMainColor,
       body: Padding(
         padding:
@@ -126,7 +127,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .login(_email.text, _password.text)
                                         .then((result) {
                                       if (result['status']) {
-                                        createSnackBar("Login Successful");
+                                        final snackBar = SnackBar(
+                                            content: Text("Login successful",
+                                                style: kTextStyle.copyWith(
+                                                    color: Colors.black),
+                                                textAlign: TextAlign.center),
+                                            backgroundColor: Colors.white);
+                                        _scaffoldKey.currentState
+                                            .showSnackBar(snackBar);
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -135,7 +143,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         );
                                       } else {
-                                        createSnackBar("Login failed");
+                                        final snackBar = SnackBar(
+                                            content: Text("Login failed",
+                                                style: kTextStyle.copyWith(
+                                                    color: Colors.black),
+                                                textAlign: TextAlign.center),
+                                            backgroundColor: Colors.white);
+                                        _scaffoldKey.currentState
+                                            .showSnackBar(snackBar);
                                       }
                                     });
                                   }
@@ -175,12 +190,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  void createSnackBar(String message) {
-    final snackBar = SnackBar(
-        content: Text(message, style: kTextStyle.copyWith(color: Colors.black)),
-        backgroundColor: Colors.white);
-    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
